@@ -1,0 +1,21 @@
+name: SimpleBountySystem
+version: 0.9.9-PreRelease
+main: cloud.stivenfocs.SimpleBountySystem.Loader
+authors: [StivenFocs]
+softdepend: [Vault,PlaceholderAPI]
+description: "Simple but High Configurable BountySystem plugin"
+commands:
+  simplebountysystem:
+    aliases: [sbs]
+    description: "Main command of the SimpleBountySystem plugin"
+permissions:
+  simplebountysystem.bounty:
+    default: true
+
+  simplebountysystem.admin:
+    default: op
+
+  simplebountysystem.*:
+    children:
+      simplebountysystem.bounty: true
+      simplebountysystem.admin: true
