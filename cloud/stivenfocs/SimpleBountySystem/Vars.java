@@ -55,6 +55,7 @@ public class Vars {
     public static List<String> killer_actions = new ArrayList<>();
     public static List<String> killed_actions = new ArrayList<>();
     public static String bounty_placeholder = "";
+    public static Boolean disable_in_duels = true;
 
     public static String prefix = "";
     public static String configuration_reloaded = "";
@@ -63,6 +64,10 @@ public class Vars {
     public static String unknown_subcommand = "";
     public static String bounty_placed = "";
     public static String bounty_updated = "";
+    public static String incomplete_command = "";
+    public static String player_not_found = "";
+    public static String integer_needed = "";
+    public static String bounty_set = "";
     public static List<String> help_admin = new ArrayList<>();
     public static List<String> help_user = new ArrayList<>();
 
@@ -92,6 +97,10 @@ public class Vars {
             getConfig().addDefault("messages.unknown_subcommand", "&cUnknown subcommand! use &4/sbs &cfor the subcommands list.");
             getConfig().addDefault("messages.bounty_placed", "&7A bounty of &a$%bounty_amount% &7has been placed on &f%player_name%");
             getConfig().addDefault("messages.bounty_updated", "&7The bounty on &f%player_name% &7has been raised up to &a$%bounty_amount%");
+            getConfig().addDefault("messages.incomplete_command", "&cIncomplete command! type &4/sbs &cfor the subcommands list.");
+            getConfig().addDefault("messages.player_not_found", "&cNo player found with the name &f%player_name%");
+            getConfig().addDefault("messages.integer_needed", "&cAn integer number is needed!");
+            getConfig().addDefault("messages.bounty_set", "&eyou applied a bounty of &f%bounty_amount% &e to &f%player_name%");
             List<String> new_help_admin = new ArrayList<>();
             new_help_admin.add("&8&m*=======================*");
             new_help_admin.add("&7* &6&lBounty&e&lSystem &7%version%");
@@ -122,6 +131,8 @@ public class Vars {
             saveDataConfig();
             reloadDataConfig();
 
+            disable_in_duels = getConfig().getBoolean("options.disable_in_duels", true);
+
             bounty_increment_every_kills = getConfig().getInt("options.bounty_increment_every_kills", 5);
             bounty_increment_amount = getConfig().getDouble("options.bounty_increment_amount", 50.0);
             killer_actions = getConfig().getStringList("options.killer_actions");
@@ -135,13 +146,17 @@ public class Vars {
             unknown_subcommand = getConfig().getString("messages.unknown_subcommand", "&cUnknown subcommand! use &4/sbs &cfor the subcommands list.");
             bounty_placed = getConfig().getString("messages.bounty_placed", "&7A bounty of &a$%bounty_amount% &7has been placed on &f%player_name%");
             bounty_updated = getConfig().getString("messages.bounty_updated", "&7The bounty on &f%player_name% &7has been raised up to &a$%bounty_amount%");
+            incomplete_command = getConfig().getString("messages.incomplete_command", "&cIncomplete command! type &4/sbs &cfor the subcommands list.");
+            player_not_found = getConfig().getString("messages.player_not_found", "&cNo player found with the name &f%player_name%");
+            integer_needed = getConfig().getString("messages.integer_needed", "&cAn integer number is needed!");
+            bounty_set = getConfig().getString("messages.bounty_set", "&eyou applied a bounty of &f%bounty_amount% &e to &f%player_name%");
             help_admin = getConfig().getStringList("messages.help_admin");
             help_user = getConfig().getStringList("messages.help_user");
 
             plugin.getLogger().info("Configuration successfully reloaded");
             return true;
         } catch (Exception ex) {
-            plugin.getLogger().severe("Couldn't load the whole configuration! disabling the plugin.");
+            plugin.getLogger().severe("Couldn't load the whole configuration! disabling the pluùgin.");
             ex.printStackTrace();
             Bukkit.getPluginManager().disablePlugin(plugin);
             return false;

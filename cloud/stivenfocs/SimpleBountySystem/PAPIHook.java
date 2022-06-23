@@ -40,7 +40,9 @@ public class PAPIHook extends PlaceholderExpansion {
     if (identifier.equals("kills")) return String.valueOf(p_stats.getKills());
     if (identifier.equals("bounty")) {
         if (p_stats.getBounty() > 0) {
-            return Vars.bounty_placeholder.replace("%bounty_amount%", String.valueOf(p_stats.getBounty()));
+            if (p_stats.getBounty().intValue() == p_stats.getBounty()) {
+                return Vars.bounty_placeholder.replace("%bounty_amount%", String.valueOf(p_stats.getBounty().intValue()));
+            } else return Vars.bounty_placeholder.replace("%bounty_amount%", String.valueOf(p_stats.getBounty()));
         } else {
             return "";
         }

@@ -47,25 +47,21 @@ public class simplebountysystem implements CommandExecutor, TabCompleter {
                 return true;
             }
             if (args[0].equalsIgnoreCase("setbounty")) {
-                if (args.length > 1) {
-                    Player p = Bukkit.getPlayerExact(args[1]);
-                    if (p != null) {
-                        if (args.length > 2) {
-                            if (Vars.isDoubleDigit(args[2])) {
-                                PlayerStats p_stats = new PlayerStats(p.getUniqueId());
-                                p_stats.setBounty(Double.parseDouble(args[2]));
-                            } else {
-
-                            }
-                        } else {
-
-                        }
-                    } else {
-
-                    }
-                } else {
-
-                }
+                if (Vars.hasAdminPermissions(sender)) {
+                    if (args.length > 1) {
+                        Player p = Bukkit.getPlayerExact(args[1]);
+                        if (p != null) {
+                            if (args.length > 2) {
+                                if (Vars.isDoubleDigit(args[2])) {
+                                    PlayerStats p_stats = new PlayerStats(p.getUniqueId());
+                                    Double bounty_amount = Double.parseDouble(args[2]);
+                                    p_stats.setBounty(bounty_amount);
+                                    Vars.sendString(Vars.bounty_set.replace("%player_name%", p.getName()).replace("%player_displayname%", p.getDisplayName()).replace("%player_uuid%", String.valueOf(p.getUniqueId())).replace("%bounty_amount%", String.valueOf(bounty_amount)), sender);
+                                } else Vars.sendString(Vars.integer_needed, sender);
+                            } else  Vars.sendString(Vars.incomplete_command, sender);
+                        } else Vars.sendString(Vars.player_not_found.replace("%player_name%", args[1]), sender);
+                    } else Vars.sendString(Vars.incomplete_command, sender);
+                } else Vars.sendString(Vars.no_permission, sender);
                 return true;
             }
 

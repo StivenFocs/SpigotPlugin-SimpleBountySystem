@@ -1,11 +1,13 @@
 package cloud.stivenfocs.SimpleBountySystem;
 
+import me.realized.duels.api.Duels;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.UUID;
 
@@ -26,6 +28,14 @@ public class GeneralEvents implements Listener {
             UUID p_UUID = p.getUniqueId();
             PlayerStats p_stats = new PlayerStats(p_UUID);
 
+            if (Bukkit.getServer().getPluginManager().getPlugin("Duels") != null || !Vars.disable_in_duels) {
+                JavaPlugin duels_plugin = (JavaPlugin) Bukkit.getServer().getPluginManager().getPlugin("Duels");
+                if (duels_plugin instanceof Duels) {
+                    Duels duels_plugin_ = (Duels) duels_plugin;
+                    if (duels_plugin_.getArenaManager().isInMatch(p)) return;
+                }
+            }
+
             if (p.getKiller() != null) {
                 Player p_killer = p.getKiller();
                 UUID p_killer_UUID = p_killer.getUniqueId();
@@ -35,7 +45,7 @@ public class GeneralEvents implements Listener {
                 if ((p_killer_stats.getKills() % Vars.bounty_increment_every_kills) == 0) {
                     p_killer_stats.setBounty(p_killer_stats.getBounty() + Vars.bounty_increment_amount);
 
-                    if (p_killer_stats.getKills() == Vars.bounty_increment_every_kills) {
+                    if (p_killer_stats.getKills().equals(Vars.bounty_increment_every_kills)) {
                         Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', Vars.bounty_placed.replace("%player_name%", p_killer.getName()).replace("%player_displayname%", p_killer.getDisplayName()).replace("%player_uuid%", String.valueOf(p_killer.getUniqueId())).replace("%bounty_amount%", String.valueOf(p_killer_stats.getBounty()))));
                     } else {
                         Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', Vars.bounty_updated.replace("%player_name%", p_killer.getName()).replace("%player_displayname%", p_killer.getDisplayName()).replace("%player_uuid%", String.valueOf(p_killer.getUniqueId())).replace("%bounty_amount%", String.valueOf(p_killer_stats.getBounty()))));
